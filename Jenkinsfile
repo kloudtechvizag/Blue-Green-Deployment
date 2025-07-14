@@ -17,15 +17,11 @@ pipeline {
 
     stages {
 
-        stage('Permissions') {
-            steps {
-                sh "chmod -R 777 mvnw"
-            }
-        }
+     
        
         stage('Compile') {
             steps {
-                sh "./mvnw compile"
+                sh "mvn compile"
             }
         }
         
@@ -42,34 +38,34 @@ pipeline {
         }
         
  
-        stage('Docker Build & tag image') {
-            steps {
-                script{
-                    withDockerRegistry(credentialsId: 'venkat-docker-creds') {
-                        sh "docker build -t ${IMAGE_NAME}:${TAG} ."
-                    }
-                }
-            }
-        }
+        // stage('Docker Build & tag image') {
+        //     steps {
+        //         script{
+        //             withDockerRegistry(credentialsId: 'venkat-docker-creds') {
+        //                 sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+        //             }
+        //         }
+        //     }
+        // }
         
         
-        stage('Docker Push image') {
-            steps {
-                script{
-                    withDockerRegistry(credentialsId: 'venkat-docker-creds') {
-                        sh "docker push ${IMAGE_NAME}:${TAG}"
-                    }
-                }
-            }
-        }
+        // stage('Docker Push image') {
+        //     steps {
+        //         script{
+        //             withDockerRegistry(credentialsId: 'venkat-docker-creds') {
+        //                 sh "docker push ${IMAGE_NAME}:${TAG}"
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Deploy MySQL to Local K8s') {
-            steps {
-                withKubeConfig(credentialsId: 'venkat-kubect-config-creds') {
-                    sh 'kubectl apply -f mysql-ds.yml'
-                }
-            }
-        }
+        // stage('Deploy MySQL to Local K8s') {
+        //     steps {
+        //         withKubeConfig(credentialsId: 'venkat-kubect-config-creds') {
+        //             sh 'kubectl apply -f mysql-ds.yml'
+        //         }
+        //     }
+        // }
 
         
         // stage('Deploy MySQL Deployment and Service') {
