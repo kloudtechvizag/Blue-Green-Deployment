@@ -38,15 +38,15 @@ pipeline {
         }
         
  
-        // stage('Docker Build & tag image') {
-        //     steps {
-        //         script{
-        //             withDockerRegistry(credentialsId: 'venkat-docker-creds') {
-        //                 sh "docker build -t ${IMAGE_NAME}:${TAG} ."
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Docker Build & tag image') {
+            steps {
+                script{
+                    withDockerRegistry(credentialsId: 'venkat-docker-creds') {
+                        sh "docker build -t ${IMAGE_NAME}:${TAG} ."
+                    }
+                }
+            }
+        }
         
         
         // stage('Docker Push image') {
