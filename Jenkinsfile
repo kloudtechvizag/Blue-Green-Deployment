@@ -67,23 +67,33 @@ pipeline {
             }
         }
 
-        
-        // stage('Deploy MySQL Deployment and Service') {
-        //     steps {
-        //         script {
-        //             withKubeConfig(caCertificate: '', clusterName: 'yogesh-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://35511BC37C08D2DA0E7A158A8AAD411F.gr7.ap-south-1.eks.amazonaws.com') {
-        //                 sh "kubectl apply -f mysql-ds.yml -n ${KUBE_NAMESPACE}"
-                        
-        //             }
+
+        stage('Deploy SVC app') {
+            steps {
+                withKubeConfig(credentialsId: 'venkat-kubect-config-creds') {
+                    sh ' kubectl apply -f bankapp-service.yml'
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    def deploymentFile = ""
+                    if (params.DEPLOY_ENV == 'blue') {
+                        deploymentFile = 'app-deployment-blue.yml'
+                    } else {
+                        deploymentFile = 'app-deployment-green.yml'
+                    }
                     
-        //         }
-                
-        //     }
-            
-        // }
-        
-        
-        
+                    withKubeConfig(credentialsId: 'venkat-kubect-config-creds') {
+                       sh "kubectl apply -f ${deploymentFile}"
+                    }
+                }
+            }
+        }
+
+
         // stage('Deploy SVC app') {
         //     steps {
         //         script {
