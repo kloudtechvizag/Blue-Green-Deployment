@@ -49,15 +49,15 @@ pipeline {
         }
         
         
-        // stage('Docker Push image') {
-        //     steps {
-        //         script{
-        //             withDockerRegistry(credentialsId: 'venkat-docker-creds') {
-        //                 sh "docker push ${IMAGE_NAME}:${TAG}"
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Docker Push image') {
+            steps {
+                script{
+                    withDockerRegistry(credentialsId: 'venkat-docker-creds') {
+                        sh "docker push ${IMAGE_NAME}:${TAG}"
+                    }
+                }
+            }
+        }
 
         // stage('Deploy MySQL to Local K8s') {
         //     steps {
